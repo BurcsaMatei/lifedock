@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  title     String
+  eventType String
+  date      String
+  time      String   @default("")
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date, time])
+  @@index([eventType])
+  @@map("events")
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  expiresAt   String
+  hasReminder Boolean  @default(true)
+  notes       String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([expiresAt])
+  @@index([category])
+  @@index([hasReminder])
+  @@map("documents")
+}
+
+model Bill {
+  id        String   @id @default(cuid())
+  provider  String
+  amount    String
+  dueDate   String
+  frequency String
+  isPaid    Boolean  @default(false)
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([dueDate])
+  @@index([frequency])
+  @@index([isPaid])
+  @@map("bills")
+}
+
+model Obligation {
+  id          String   @id @default(cuid())
+  title       String
+  priority    String
+  dueDate     String
+  details     String   @default("")
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([dueDate])
+  @@index([priority])
+  @@index([isCompleted])
+  @@map("obligations")
+}
