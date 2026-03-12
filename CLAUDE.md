@@ -1,3 +1,42 @@
+## Faza D — Search real global — FINALIZATĂ
+
+Construit în `src/modules/search/` urmând exact pattern-ul existent.
+
+### Ce s-a implementat
+
+* `GET /api/search?q=query` — 4 query-uri Prisma paralele cu `contains` (SQLite LIKE case-insensitive pentru ASCII)
+* Surse: Events (`title`, `notes`), Documents (`title`, `notes`), Bills (`provider`, `notes`), Obligations (`title`, `details`)
+* `SearchResult`: `id`, `type`, `title`, `subtitle`, `href`
+* `SearchResponse` grupat: `{ events, documents, bills, obligations }`
+* `SearchModalProvider` context — `isOpen`, `open`, `close` via `useSearchModal` hook
+* `SearchModal` overlay global:
+  * Input cu debounce 300ms
+  * Query < 2 caractere → empty state, fără fetch
+  * Loading / no-results / grouped results states
+  * Click pe rezultat → navigate la `href` + închide modal
+  * ESC → închide modal
+  * Click pe backdrop → închide modal
+* Butonul "Caută" din BottomNav → deschide modal (nu navighează la `/search`)
+* `SearchModalProvider` + `SearchModal` montate în `(app)/layout.tsx`
+* Typecheck verde, lint verde
+
+### Fișierele cheie
+
+```text
+src/modules/search/lib/search.contracts.ts
+src/modules/search/lib/search.api.ts
+src/modules/search/lib/search.context.tsx
+src/modules/search/server/search.repository.ts
+src/modules/search/components/SearchModal/SearchModal.tsx
+src/modules/search/components/SearchModal/SearchModal.css.ts
+src/modules/search/index.ts
+src/app/api/search/route.ts
+src/app/(app)/layout.tsx        ← adăugat SearchModalProvider + SearchModal
+src/shared/components/layout/BottomNav/BottomNav.tsx  ← "Caută" → openSearch
+```
+
+---
+
 ## Faza C — Calendar real — FINALIZATĂ
 
 Construit în `src/modules/calendar/` urmând exact pattern-ul existent.
@@ -391,7 +430,7 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 * auth real complet
 * multi-user ownership
 * spaces reale cu ownership / grouping logic
-* search real global peste entități
+* notifications reale / reminder engine (search real este acum finalizat)
 * notifications reale / reminder engine
 * billing real
 * upload logic real pentru documente
@@ -416,11 +455,12 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 * **Calendar real** bazat pe Events + Bills + Obligations + Documents
 * react-calendar v6, tileContent cu chips color-coded, DayPanel per zi
 
-### Faza D — următoarea
+### Faza D — finalizată
 
 * **Search real global** peste toate entitățile (Events, Documents, Bills, Obligations)
+* Modal global cu debounce, SearchModalProvider context, BottomNav integrat
 
-### Faza E — după search
+### Faza E — următoarea
 
 * **Notifications / reminders reale**
 
@@ -444,10 +484,11 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 * standardizarea server-side
 * dashboard-ul real — acesta este **finalizat și validat**
 * calendarul real — acesta este **finalizat și validat**
+* search-ul real global — acesta este **finalizat și validat**
 
 Următorul pas NU este:
 
-* refacerea dashboard-ului sau calendarului
+* refacerea dashboard-ului, calendarului sau search-ului
 * încă un CRUD
 * redesign gratuit
 * auth
@@ -457,7 +498,7 @@ Următorul pas NU este:
 
 Următorul pas ESTE:
 
-## **Search real global peste toate entitățile (Events, Documents, Bills, Obligations)**
+## **Notifications / reminders reale**
 
 ---
 
@@ -501,10 +542,17 @@ Context fix:
   - Chips color-coded inline styles: event=#0ea5e9, bill=#f04438, obligation=#f79009, document=#12b76a
   - Click pe zi → DayPanel cu items reale; click pe item → navigate la detaliu
   - typecheck și lint verzi
+- Faza D finalizată: Search real global.
+  - src/modules/search/ complet (contracts, api, context, repository, SearchModal)
+  - GET /api/search?q=query în src/app/api/search/route.ts
+  - SearchModalProvider context în (app)/layout.tsx; SearchModal montat global
+  - Butonul "Caută" din BottomNav → deschide modal (nu navighează)
+  - Debounce 300ms, grouped results, ESC/backdrop close, navigate la detaliu
+  - typecheck și lint verzi
 - Nu tratăm acum: redesign, auth, billing, spaces, multi-user, alt CRUD.
 
-Scopul fazei D:
-- Search real global peste toate entitățile (Events, Documents, Bills, Obligations)
+Scopul fazei E:
+- Notifications / reminders reale
 
 Workflow obligatoriu:
 - fără presupuneri
@@ -513,3 +561,4 @@ Workflow obligatoriu:
 - TypeScript strict, Vanilla Extract only (excepție izolată CalendarGrid chips), relative imports only
 - păstrăm disciplina arhitecturală deja stabilită
 ```
+
