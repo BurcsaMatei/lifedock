@@ -1,5 +1,40 @@
-Se studiaza prima data acest fisier.
-Lucram per pasi logici. Dupa ce am terminat un pas, definim urmatorul pas logic din taget (app functional) si mergem pe el.
+## Faza C — Calendar real — FINALIZATĂ
+
+Construit în `src/modules/calendar/` urmând exact pattern-ul existent.
+
+### Ce s-a implementat
+
+* `react-calendar` v6 instalat ca dependință (zero CSS din librărie)
+* `GET /api/calendar?month=YYYY-MM` — returnează `CalendarDayItem[]` pentru luna respectivă
+* Surse de date agregate: `Events.date`, `Bills.dueDate`, `Obligations.dueDate`, `Documents.expiresAt`
+* `CalendarItemType`: `event | bill | obligation | document`
+* Chips color-coded în tileContent cu inline styles (vezi excepția de styling din secțiunea 2):
+  * event → `#0ea5e9`
+  * bill → `#f04438`
+  * obligation → `#f79009`
+  * document → `#12b76a`
+* Click pe zi → `selectedDate` în state local → `DayPanel` cu lista completă a zilei
+* Click pe item în `DayPanel` → navighezi la `href` (detaliu entitate)
+* Loading / error / empty states complete
+* Typecheck verde, lint verde
+
+### Fișierele cheie
+
+```text
+src/modules/calendar/lib/calendar.contracts.ts
+src/modules/calendar/lib/calendar.api.ts
+src/modules/calendar/server/calendar.repository.ts
+src/app/api/calendar/route.ts
+src/modules/calendar/components/CalendarGrid/CalendarGrid.tsx
+src/modules/calendar/components/CalendarGrid/CalendarGrid.css.ts
+src/modules/calendar/components/DayPanel/DayPanel.tsx
+src/modules/calendar/components/DayPanel/DayPanel.css.ts
+src/modules/calendar/screens/CalendarScreen/CalendarScreen.tsx
+src/modules/calendar/screens/CalendarScreen/CalendarScreen.css.ts
+src/modules/calendar/index.ts
+src/app/(app)/calendar/page.tsx
+```
+
 
 ## 1. Direcția corectă a produsului
 
@@ -34,7 +69,8 @@ Stack-ul și regulile proiectului rămân:
 
 * **Next.js 16 App Router**
 * **TypeScript foarte strict**
-* **Vanilla Extract only**
+* **Vanilla Extract only** — zero inline styles, zero Tailwind
+  * **Excepție izolată:** `CalendarGrid.tsx` — chips din `tileContent` folosesc inline styles (`CHIP_BASE`, `CHIP_COLORS`) din cauza limitării de scoping CSS cu react-calendar v6. Orice altă excepție necesită aprobare explicită.
 * **doar importuri relative**
 * **ESLint flat config**
 * **module-first architecture**
@@ -344,6 +380,7 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 * Prisma + SQLite funcționale
 * 4 verticale reale pe DB cu CRUD complet
 * Dashboard / Home real cu agregare cross-module
+* Calendar real cu react-calendar v6, chips color-coded, DayPanel
 * counters reale, secțiuni reale, items cu link spre detaliu
 * loading / error / empty states pe tot
 * typecheck verde
@@ -354,7 +391,6 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 * auth real complet
 * multi-user ownership
 * spaces reale cu ownership / grouping logic
-* calendar real bazat pe datele persistate
 * search real global peste entități
 * notifications reale / reminder engine
 * billing real
@@ -375,12 +411,16 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 
 * **Dashboard / Home real cu agregare cross-module**
 
-### Faza C — următoarea
+### Faza C — finalizată
 
-* **Calendar real** bazat pe Events + datele din celelalte verticale
-* **Search real** global peste toate entitățile
+* **Calendar real** bazat pe Events + Bills + Obligations + Documents
+* react-calendar v6, tileContent cu chips color-coded, DayPanel per zi
 
-### Faza D — după calendar/search
+### Faza D — următoarea
+
+* **Search real global** peste toate entitățile (Events, Documents, Bills, Obligations)
+
+### Faza E — după search
 
 * **Notifications / reminders reale**
 
@@ -403,10 +443,11 @@ LifeDock este acum un **produs coerent**, nu doar o colecție de CRUD-uri.
 * list/create/detail/edit/delete pentru cele 4 verticale
 * standardizarea server-side
 * dashboard-ul real — acesta este **finalizat și validat**
+* calendarul real — acesta este **finalizat și validat**
 
 Următorul pas NU este:
 
-* refacerea dashboard-ului
+* refacerea dashboard-ului sau calendarului
 * încă un CRUD
 * redesign gratuit
 * auth
@@ -416,7 +457,7 @@ Următorul pas NU este:
 
 Următorul pas ESTE:
 
-## **Calendar real, bazat pe datele existente din Events + celelalte verticale**
+## **Search real global peste toate entitățile (Events, Documents, Bills, Obligations)**
 
 ---
 
@@ -454,16 +495,21 @@ Context fix:
   - HomeScreen real cu secțiuni: upcoming events, expiring documents, unpaid bills, urgent obligations
   - loading / error / empty states complete
   - typecheck și lint verzi
+- Faza C finalizată: Calendar real cu react-calendar v6.
+  - src/modules/calendar/ complet (contracts, api, repository, CalendarGrid, DayPanel, CalendarScreen)
+  - GET /api/calendar?month=YYYY-MM în src/app/api/calendar/route.ts
+  - Chips color-coded inline styles: event=#0ea5e9, bill=#f04438, obligation=#f79009, document=#12b76a
+  - Click pe zi → DayPanel cu items reale; click pe item → navigate la detaliu
+  - typecheck și lint verzi
 - Nu tratăm acum: redesign, auth, billing, spaces, multi-user, alt CRUD.
 
-Scopul fazei C:
-- Calendar real bazat pe datele existente (în primul rând Events)
-- Posibil integrat cu deadlines din Bills și Obligations
+Scopul fazei D:
+- Search real global peste toate entitățile (Events, Documents, Bills, Obligations)
 
 Workflow obligatoriu:
 - fără presupuneri
 - citim fișierele înainte de orice patch
 - patch-uri complete, ready-to-replace
-- TypeScript strict, Vanilla Extract only, relative imports only
+- TypeScript strict, Vanilla Extract only (excepție izolată CalendarGrid chips), relative imports only
 - păstrăm disciplina arhitecturală deja stabilită
 ```
