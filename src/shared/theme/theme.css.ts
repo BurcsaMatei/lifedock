@@ -2,7 +2,7 @@ import { createTheme } from "@vanilla-extract/css";
 
 import { vars } from "./contract.css";
 
-export const [themeClass] = createTheme(vars, {
+export const themeClass = createTheme(vars, {
   color: {
     backgroundCanvas: "#f5f7fb",
     backgroundSurface: "#ffffff",
