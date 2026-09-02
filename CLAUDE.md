@@ -1,3 +1,9 @@
+## Status proiect (notă KonceptID)
+
+**Ultima verificare: 2026-09-02.** Proiect în stand-by — ultimul commit real e din 2026-04-11 (Faza D — Search). Cod funcțional (typecheck curat, 4 verticale CRUD + Dashboard + Calendar + Search complete), dar fără auth real, fără deployment, fără testare configurată. **Va fi reluat pe viitor** (Faza E — Notifications/reminders e următorul pas planificat), dar nu e prioritate curentă. Nu se șterge, nu se atinge codul până la reluare.
+
+---
+
 ## Faza D — Search real global — FINALIZATĂ
 
 Construit în `src/modules/search/` urmând exact pattern-ul existent.
