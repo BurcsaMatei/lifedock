@@ -4,7 +4,7 @@
   "private": true,
   "description": "LifeDock - personal, student and company admin hub built with Next.js, TypeScript and Vanilla Extract.",
   "engines": {
-    "node": ">=20.19.0"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "next dev --webpack",
@@ -18,6 +18,8 @@
     "check:structure": "node ./scripts/verify-structure.mjs",
     "check:types": "node ./scripts/check-strict-types.mjs",
     "check": "npm run lint && npm run typecheck && npm run check:imports && npm run check:structure && npm run check:types",
+    "check:all": "npm run check",
+    "verify:prod": "npm run build && NODE_ENV=production npm start",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "test:e2e": "playwright test",

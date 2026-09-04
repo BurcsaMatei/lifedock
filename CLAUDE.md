@@ -1,6 +1,16 @@
 ## Status proiect (notă KonceptID)
 
-**Ultima verificare: 2026-09-02.** Proiect în stand-by — ultimul commit real e din 2026-04-11 (Faza D — Search). Cod funcțional (typecheck curat, 4 verticale CRUD + Dashboard + Calendar + Search complete), dar fără auth real, fără deployment, fără testare configurată. **Va fi reluat pe viitor** (Faza E — Notifications/reminders e următorul pas planificat), dar nu e prioritate curentă. Nu se șterge, nu se atinge codul până la reluare.
+**Ultima verificare: 2026-09-04.** Proiect în stand-by — ultimul commit real e din 2026-04-11 (Faza D — Search). Cod funcțional (typecheck curat, 4 verticale CRUD + Dashboard + Calendar + Search complete), dar fără auth real, fără deployment, fără testare configurată. **Va fi reluat pe viitor** (Faza E — Notifications/reminders e următorul pas planificat), dar nu e prioritate curentă. Nu se șterge, nu se atinge codul până la reluare.
+
+**Mentenanță de portofoliu, aplicată în stand-by (excepții explicite, confirmate de user):** sweep-ul
+de securitate Val 0.2 (2026-09-04, PR #1) și alinierea Node Val 0.3 (2026-09-04). Ambele sunt
+**patch-uri și configurație, zero cod** — regula de mai sus spune „nu se atinge *codul*", iar a lăsa
+proiectul pe dinafară ar fi creat exact driftul pe care valurile îl elimină. Excepția **nu** se
+extinde la feature work fără reconfirmare.
+
+`check:all` din `STANDARDS.md` §2 e aici **alias către `check`** — poarta proprie a proiectului
+(lint + typecheck + `check:imports` + `check:structure` + `check:types`) e mai strictă decât
+standardul, deci standardul o cheamă pe ea, nu o slăbește.
 
 ---
 
