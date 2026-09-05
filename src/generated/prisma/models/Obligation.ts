@@ -179,7 +179,7 @@ export type ObligationGroupByOutputType = {
   _max: ObligationMaxAggregateOutputType | null
 }
 
-type GetObligationGroupByPayload<T extends ObligationGroupByArgs> = Prisma.PrismaPromise<
+export type GetObligationGroupByPayload<T extends ObligationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ObligationGroupByOutputType, T['by']> &
       {
@@ -1038,6 +1038,11 @@ export type ObligationFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` Obligations.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Obligations.
+   */
   distinct?: Prisma.ObligationScalarFieldEnum | Prisma.ObligationScalarFieldEnum[]
 }
 
