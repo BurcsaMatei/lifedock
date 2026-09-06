@@ -40,6 +40,15 @@ actualizezi documentația în același commit.
 
 ## Reguli de lucru
 
+### Workflow
+
+Workflow (branch, când e nevoie de issue, analiză→execuție, PR, merge) → `konceptid-ops` →
+`STANDARDS.md` §7. Nu se repetă aici. **Cu o excepție de proiect:** cât timp `lifedock` e în
+stand-by (vezi §Status), orice schimbare de cod — chiar și una mică — cere confirmare explicită a
+userului înainte de a începe, nu doar analiză→execuție ca de obicei.
+
+### Cod
+
 - **TypeScript foarte strict**, fără `any`, fără patch-uri pe presupuneri.
 - **Vanilla Extract only** — zero inline styles, zero Tailwind. Excepție izolată documentată în
   [`ARCHITECTURE.md`](./ARCHITECTURE.md) (`CalendarGrid.tsx`). Orice altă excepție necesită
