@@ -56,3 +56,17 @@ Construit în `src/modules/search/`, urmând pattern-ul existent.
 - `SearchModal`: debounce 300ms, empty state sub 2 caractere, loading/no-results/grouped results,
   ESC și click pe backdrop închid modalul, click pe rezultat navighează și închide
 - Butonul „Caută" din `BottomNav` deschide modalul (nu mai navighează la `/search`)
+
+## Mentenanță 2026-11-26 — sweep de securitate (25 vulnerabilități → 0), zero cod de produs
+
+Proiectul e în **stand-by**; excepția de mentenanță (securitate) a fost **confirmată explicit** de proprietar. **Doar** `package.json`, `package-lock.json` și clientul Prisma generat (comis în repo).
+
+**`npm audit`: 25 (3 critice, 9 grave, 12 moderate, 1 mică) → 0.** Schimbări: `next` `^16.4.6` (16.3.4 → 16.4.6, critică), `sharp` `^0.35.5`, `npm audit fix` (fără `--force`; între altele `zod` 4.3.6 → 4.6.7), `vitest` + `@vitest/coverage-v8` 3 → `^5.1.2` (salt major; critice `vitest`/`tinypool`), `overrides.effect` `^3.22.5` (Prisma fixează `effect` 3.20.0, vulnerabil ≤ 3.22.0; aceeași linie majoră, ca precedentul `mysql2`), `tsx` și `@vanilla-extract/integration` urcate (aceasta din urmă permite `esbuild` 0.28.2, reparat). Fișierele `src/generated/prisma/*` diferă **doar** prin versiunea clientului/motorului (CLI 7.10.0 → 7.10.1, regenerat de `postinstall`).
+
+**Intenționat NEFĂCUT:** `eslint-config-next` rămâne **fixat 16.1.6** (fără vulnerabilitate). Urcarea lui trage `eslint-plugin-react-hooks` 7.1.1, care dă **5 erori** (`set-state-in-effect`) în codul de produs, interzis în stand-by; de făcut la reluare.
+
+**Verificat:** `npm ci`, `npm ls`; `npm run check` (lint cu `--max-warnings=0`, typecheck, importuri, structură, tipuri stricte) verde; `npm run build` verde, aceleași rute. **Proiectul nu are niciun test**, deci comportamentul a fost verificat cu un test extern pe o bază SQLite **nouă și temporară** (`dev.db` neatins): 25 de pagini în browser, creare/citire/modificare/ștergere pe cele 4 entități cu date valide și invalide, dashboard, calendar, căutare, cele 4 formulare trimise goale și completate — **82 de verificări identice** înainte și după (testul a fost întâi rulat de două ori pe codul vechi cu rezultat identic). `vitest run --passWithNoTests` pornește pe 5.1.2. **`zod`:** diferențial pe cele 12 scheme, 6.100 de intrări, 4.3.6 ↔ 4.6.7: **12 schimbări respins → acceptat**, toate același caz — 61 de emoji într-un câmp cu maximum 120 (4.6.7 numără caractere, nu unități UTF-16); validarea de pe server (`src/server/validation/input.ts`, `value.length`) **respinge în continuare**, deci în bază nu ajunge nimic în plus; efectul vizibil: mesajul vine de la server, nu din formular. 0 diferențe la datele acceptate de ambele; restul diferențelor sunt formulări pentru `Infinity`.
+
+**Avertismente rămase (preexistente, nu sunt de securitate; cer cod/config de produs):** `npm ci`: `prebuild-install` deprecat (adus de `better-sqlite3`); `next build`: `experimental.typedRoutes` mutat la `typedRoutes`, convenția `middleware` → `proxy`.
+
+**Neverificat:** migrare/seed pe o bază cu date reale, notificările `web-push`, aspectul vizual (nu s-au comparat capturi).
