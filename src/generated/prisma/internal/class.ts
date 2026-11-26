@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.10.0",
-  "engineVersion": "0edf323efd1d98336f3f0a68684b56f689b900d3",
+  "clientVersion": "7.10.1",
+  "engineVersion": "d1b3f377ca835d73fd50954a5e22128b9ebdd6b8",
   "activeProvider": "sqlite",
   "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel Event {\n  id        String   @id @default(cuid())\n  title     String\n  eventType String\n  date      String\n  time      String   @default(\"\")\n  notes     String   @default(\"\")\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([date, time])\n  @@index([eventType])\n  @@map(\"events\")\n}\n\nmodel Document {\n  id          String   @id @default(cuid())\n  title       String\n  category    String\n  expiresAt   String\n  hasReminder Boolean  @default(true)\n  notes       String   @default(\"\")\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  @@index([expiresAt])\n  @@index([category])\n  @@index([hasReminder])\n  @@map(\"documents\")\n}\n\nmodel Bill {\n  id        String   @id @default(cuid())\n  provider  String\n  amount    String\n  dueDate   String\n  frequency String\n  isPaid    Boolean  @default(false)\n  notes     String   @default(\"\")\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([dueDate])\n  @@index([frequency])\n  @@index([isPaid])\n  @@map(\"bills\")\n}\n\nmodel Obligation {\n  id          String   @id @default(cuid())\n  title       String\n  priority    String\n  dueDate     String\n  details     String   @default(\"\")\n  isCompleted Boolean  @default(false)\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  @@index([dueDate])\n  @@index([priority])\n  @@index([isCompleted])\n  @@map(\"obligations\")\n}\n",
   "runtimeDataModel": {
